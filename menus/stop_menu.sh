@@ -2,12 +2,12 @@ source $(readlink -f core/constants.sh)
 source $(readlink -f core/utils.sh)
 
 STOP_PSQL(){
-  echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+  echo -e $GREET
 
   brew services stop postgresql
   sleep 1
   echo -e "🧌 $HENCHMAN: PostgreSQL server stopped."
-  echo -e "🧌 $HENCHMAN: Bye, have a great day."
+  echo -e $BYE
 }
 
 STOP() {
@@ -23,12 +23,12 @@ STOP() {
 
     case $CHOICE in
       "1") STOP_PSQL ;;
-      "2") echo -e "🧌 $HENCHMAN: Bye, have a great day." ;;
+      "2") echo -e $BYE ;;
       *) echo -e "🧌 $HENCHMAN: Invalid choice choose again." ;;
     esac
   elif [ $1  == "-h" || $1 == "--help" ]
   then
-    echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+    echo -e $GREET
     echo "Available Commands:"
     echo -e "\nPostgreSQL Server"
     echo "Stop the running PostgreSQL Server using the following command - henchman stop psql"

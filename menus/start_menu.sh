@@ -2,7 +2,7 @@ source $(readlink -f core/constants.sh)
 source $(readlink -f core/utils.sh)
 
 START_ANDROID_EMULATOR() {
-  echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+  echo -e $GREET
   echo -e "🧌 $HENCHMAN: Starting Android Simulator\n"
 
   OUTPUT=()
@@ -15,22 +15,22 @@ START_ANDROID_EMULATOR() {
   emulator "@$EMULATOR"
 
   echo -e "🧌 $HENCHMAN: Task complete!"
-  echo -e "🧌 $HENCHMAN: Bye, have a great day."
+  echo -e $BYE
 }
 
 START_IOS_EMULATOR(){
-  echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+  echo -e $GREET
   echo -e "🧌 $HENCHMAN: Starting iOS Simulator\n"
 
   open -a simulator
 
   echo -e "🧌 $HENCHMAN: Task complete!"
-  echo -e "🧌 $HENCHMAN: Bye, have a great day."
+  echo -e $BYE
 }
 
 # PostgreSQL Functions
 START_PSQL(){
-  echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+  echo -e $GREET
 
   echo -e "🧌 $HENCHMAN: Starting PostgreSQL Server\n"
 
@@ -61,12 +61,12 @@ START() {
       "1") START_PSQL ;;
       "2") START_ANDROID_EMULATOR ;;
       "3") START_IOS_EMULATOR ;;
-      "4") echo -e "🧌 $HENCHMAN: Bye, have a great day." ;;
+      "4") echo -e $BYE ;;
       *) echo -e "🧌 $HENCHMAN: Invalid choice choose again." ;;
     esac
   elif [[ $1  == "-h" || $1 == "--help" ]]
   then
-    echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+    echo -e $GREET
     echo "Available Commands:"
     echo -e "\nStart PostgreSQL Server"
     echo "Start postgreSql server using the following command - henchman start psql"

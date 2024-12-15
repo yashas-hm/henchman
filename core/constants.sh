@@ -4,6 +4,8 @@ GREEN="\033[1;32m"
 RED="\033[0;31m"
 YELLOW="\033[1;33m"
 HENCHMAN="${GREEN}Henchman${DEFAULT_COLOR}"
+BYE=$BYE
+GREET=$GREET
 
 LOGO() {
   echo -e "$GREEN

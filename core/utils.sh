@@ -12,7 +12,7 @@ MENU() {
 
     LOGO
 
-    echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+    echo -e $GREET
     echo -e "Please choose from one: $YELLOW(use arrow keys)$DEFAULT_COLOR"
 
     for (( i=1;i<=(($LENGTH-1));i++ ))
@@ -57,7 +57,7 @@ MENU() {
 
 PATH_SETUP(){
   SETUP=$1
-  echo -e "🧌 $HENCHMAN: Happy to Help!\n"
+  echo -e $GREET
   
   echo "Enter file path where to run the function"
   echo "Leave empty to run in current folder."
@@ -70,10 +70,10 @@ PATH_SETUP(){
 
   read SETUPPATH
 
-  if [ $SETUPPATH == "q" ]
+  if [[ $SETUPPATH == "q" ]]
   then
     echo -e "\n🧌 $HENCHMAN: Aborting!!"
-    echo -e "🧌 $HENCHMAN: Bye, have a great day."
+    echo -e $BYE
     exit 1
   elif [ ! -z $SETUPPATH ]
   then

@@ -18,6 +18,6 @@ CLEAN_FLUTTER_BUILD() {
   done
 
   echo -e "🧌 $HENCHMAN: Project cleanup complete"
-  echo -e "🧌 $HENCHMAN: Bye, have a great day."
+  echo -e $BYE
 }
 

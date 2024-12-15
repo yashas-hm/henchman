@@ -1,7 +1,7 @@
 source $(readlink -f core/utils.sh)
 source $(readlink -f core/constants.sh)
 
-CLEAN_NODE_PROJECTS() {
+CLEAN_NODE_MODULES() {
   PATH_SETUP --cleanup
 
   echo -e "🧌 $HENCHMAN: Cleaning all node projects"

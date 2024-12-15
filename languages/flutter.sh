@@ -1,7 +1,7 @@
 source $(readlink -f core/utils.sh)
 source $(readlink -f core/constants.sh)
 
-CLEAN_FLUTTER_PROJECTS() {
+CLEAN_FLUTTER_BUILD() {
   PATH_SETUP --cleanup
 
   echo -e "🧌 $HENCHMAN: Cleaning all flutter projects"

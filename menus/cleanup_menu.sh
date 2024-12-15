@@ -8,7 +8,7 @@ CLEAN_FLUTTER_PROJECTS() {
 
   for directory in *;
   do
-    if [[ -d "$directory" ]]
+    if [ -d "$directory" ]
     then
       cd "$directory"
       echo -e "🧌 $HENCHMAN: Cleaning flutter project in $directory"
@@ -28,7 +28,7 @@ CLEAN_NODE_PROJECTS() {
 
   for directory in *;
   do
-    if [[ -d "$directory" ]]
+    if [ -d "$directory" ]
     then
       cd "$directory"
       echo -e "🧌 $HENCHMAN: Cleaning node project in $directory"
@@ -42,7 +42,7 @@ CLEAN_NODE_PROJECTS() {
 }
 
 CLEANUP_MENU() {
-  if [[ -z $1 ]]
+  if [ -z $1 ]
   then
     declare -a OPTIONS=(
       [0]=""
@@ -59,7 +59,7 @@ CLEANUP_MENU() {
       "3") echo -e "🧌 $HENCHMAN: Bye, have a great day." ;;
       *) echo -e "🧌 $HENCHMAN: Invalid choice choose again." ;;
     esac
-  elif [[ $1  == "-h" || $1 == "--help" ]]
+  elif [ $1  == "-h" || $1 == "--help" ]
   then
     echo -e "🧌 $HENCHMAN: Happy to Help!\n"
     echo "Available Commands:"
@@ -67,10 +67,10 @@ CLEANUP_MENU() {
     echo "Clean unwanted files from all flutter sub-directories using this command - henchman clean flutter"
     echo -e "\nNode"
     echo "Clean unwanted files from all node sub-directories using this command - henchman clean node"
-  elif [[ $1 == "flutter" ]]
+  elif [ $1 == "flutter" ]
   then
     CLEAN_FLUTTER_PROJECTS
-  elif [[ $1 == "node" ]]
+  elif [ $1 == "node" ]
   then
     CLEAN_NODE_PROJECTS
   else

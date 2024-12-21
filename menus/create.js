@@ -1,15 +1,18 @@
 import {program} from 'commander';
+import inquirer from 'inquirer';
+import {greetMessage, logo} from "../core/constants.js";
+import {execute, getPath} from "../core/utils.js";
 
 export function createCLI() {
     const create = program.command('create')
         .argument('[config]')
         .description('Create new project for <command> languages')
-        .action((_)=>{
+        .action(async (_)=>{
             if(_!==undefined){
                 console.log(program.helpInformation());
                 process.exit(1);
             }else{
-                console.log('ed')
+                await create_menu();
             }
         });
     
@@ -32,8 +35,33 @@ export function createCLI() {
         .action((argument) => console.log(argument));
 
     create
-        .command('python')
+        .command('bash')
         .argument('[config]')
         .description('')
         .action((argument) => console.log(argument));
 }
+
+export async function create_menu(){
+    logo();
+    
+    console.log(greetMessage);
+    
+    const answer = await inquirer.prompt({
+        type: 'list',
+        name: 'choice',
+        message: 'Please choose from one:',
+        choices: [
+            'Flutter',
+            'Node',
+            'Python',
+            'Git',
+            'Bash'
+        ],
+    });
+    console.log(answer['choice']);
+    const path = await getPath();
+    console.log(path);
+    await execute(`flutter create ${path}`);
+    console.log('Done')
+}
+

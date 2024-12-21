@@ -1,0 +1,19 @@
+{
+  "name": "henchman",
+  "version": "1.0.0",
+  "description": "DevTool to make life easy",
+  "main": "henchman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node henchman.js"
+  },
+  "bin": "./henchman.js",
+  "type": "module",
+  "author": "Yashas H Majmudar",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.0",
+    "commander": "^12.1.0",
+    "inquirer": "^12.3.0"
+  }
+}

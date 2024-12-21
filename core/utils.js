@@ -1,12 +1,9 @@
-import inquirer from "inquirer";
+import {createCLI} from "../menus/create.js";
+import {program} from "commander";
+import {setupCLI} from "../menus/setup.js";
 
-export async function menu(list){
-    return inquirer.prompt([
-        {
-          type: 'list',
-          name: 'menu',
-          message: 'Please choose from one:',
-          choices: list,  
-        },
-    ]);
+export function initCLI() {
+    createCLI();
+    setupCLI();
+    program.parse(process.argv);
 }

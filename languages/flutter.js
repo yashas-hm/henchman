@@ -38,7 +38,8 @@ export async function createFlutterPackage(dir){
     params.push(`--description="${description}"`);
     params.push(`--template=package`);
    
-    await execute(`flutter create -e ${dir} ${params.join(' ')}`);
+    await execute(`flutter create ${dir} ${params.join(' ')}`, 'Creating Flutter Package');
+    await execute(`flutter create -e ${dir}/example`, 'Creating Flutter Example');
     
     const spinner = ora(`${henchman}: Initializing setup for Flutter Package`).start();
     try{
@@ -47,10 +48,7 @@ export async function createFlutterPackage(dir){
     }catch(err){
         errorSpinnerExit(spinner, err);
     }
-    spinner.succeed(`${henchman}: Setup Complete\n`);
-    
-    await execute(`flutter create -e ${dir}/example`);
-    
+    spinner.succeed(`${henchman}: Setup Complete`);
     console.log(byeMessage);
 }
 
@@ -103,7 +101,7 @@ export async function createFlutter(path, platforms) {
     params.push(`--description="${description}"`);
     params.push(`--org="${org}"`);
 
-    await execute(`flutter create -e ${path} ${params.join(' ')}`);
+    await execute(`flutter create -e ${path} ${params.join(' ')}`, 'Creating Flutter App');
 
     await addDependencies(path, platforms);
 
@@ -127,9 +125,10 @@ export async function addDependencies(path, platforms) {
         dependencies.push('hive', 'hive_flutter',);
     }
 
-    console.log(`${henchman}: Adding dependencies`);
-
-    await execute(`cd ${path}; flutter pub add ${dependencies.join(' ')}`);
+    await execute(
+        `cd ${path}; flutter pub add ${dependencies.join(' ')}`, 
+        'Adding dependencies'
+    );
 
     if (platforms.includes('Android') || platforms.includes('iOS')) {
         dependencies = [
@@ -138,8 +137,10 @@ export async function addDependencies(path, platforms) {
             'build_runner',
             'flutter_launcher_icons',
         ];
-        console.log(`${henchman}: Adding dev dependencies`);
-        await execute(`cd ${path}; flutter pub add -d ${dependencies.join(' ')}`);
+        await execute(
+            `cd ${path}; flutter pub add -d ${dependencies.join(' ')}`, 
+            'Adding dev dependencies'
+        );
     }
 }
 
@@ -196,8 +197,10 @@ export async function cleanFlutterProjects(dir) {
             if(status.isDirectory()){
                 const subDir = await fs.readdir(dirPath);
                 if(subDir.includes('pubspec.yaml')){
-                    console.log(`Cleaning Flutter in ${dirPath}`);
-                    await execute(`cd ${dirPath}; flutter clean build`);
+                    await execute(
+                        `cd ${dirPath}; flutter clean build`, 
+                        `Cleaning Flutter in ${dirPath}`
+                    );
                 }
             }
         }

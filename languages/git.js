@@ -36,12 +36,17 @@ export async function createRepo(dir) {
         'git push -u origin main',
         'Creating new GIT repository'
     );
+
+    console.log(byeMessage);
 }
 
 export async function generalGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding general .gitignore`).start();
     try {
-        const data = await fs.readFile(path.join(baseDir, 'templates/git.txt'), {encoding: 'utf8'});
+        const data = await fs.readFile(
+            path.join(baseDir, 'templates/gitignore/git.txt'), 
+            {encoding: 'utf8'}
+        );
         await fs.writeFile(path.join(dir, '.gitignore'), data);
     } catch (err) {
         errorSpinnerExit(spinner, err);
@@ -54,7 +59,7 @@ export async function flutterGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding flutter specific .gitignore`).start();
     try {
         const data = await fs.readFile(
-            path.join(baseDir, 'templates/git_flutter.txt'), 
+            path.join(baseDir, 'templates/gitignore/git_flutter.txt'),
             {encoding: 'utf8'}
         );
         await fs.appendFile(path.join(dir, '.gitignore'), data);
@@ -67,7 +72,10 @@ export async function flutterGitIgnore(dir) {
 export async function unityGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding Unity .gitignore`).start();
     try {
-        const data = await fs.readFile(path.join(baseDir, 'templates/git_unity.txt'), {encoding: 'utf8'});
+        const data = await fs.readFile(
+            path.join(baseDir, 'templates/gitignore/git_unity.txt'), 
+            {encoding: 'utf8'}
+        );
         await fs.writeFile(path.join(dir, '.gitignore'), data);
     } catch (err) {
         errorSpinnerExit(spinner, err);
@@ -80,7 +88,7 @@ export async function nodeGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding node specific .gitignore`).start();
     try {
         const data = await fs.readFile(
-            path.join(baseDir, 'templates/git_node.txt'),
+            path.join(baseDir, 'templates/gitignore/git_node.txt'),
             {encoding: 'utf8'}
         );
         await fs.appendFile(path.join(dir, '.gitignore'), data);
@@ -95,7 +103,7 @@ export async function pythonGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding python specific .gitignore`).start();
     try {
         const data = await fs.readFile(
-            path.join(baseDir, 'templates/git_python.txt'),
+            path.join(baseDir, 'templates/gitignore/git_python.txt'),
             {encoding: 'utf8'}
         );
         await fs.appendFile(path.join(dir, '.gitignore'), data);
@@ -105,21 +113,21 @@ export async function pythonGitIgnore(dir) {
     spinner.succeed(`${henchman}: .gitignore modified`);
 }
 
-export async function gitIgnoreByArgument(args){
+export async function gitIgnoreByArgument(args) {
     switch (args) {
-        case 'General':
+        case 'general':
             await generalGitIgnore(path);
             break;
-        case 'Flutter':
+        case 'flutter':
             await flutterGitIgnore(path);
             break;
-        case 'Node':
+        case 'node':
             await nodeGitIgnore(path);
             break;
-        case 'Python':
+        case 'python':
             await pythonGitIgnore(path);
             break;
-        case 'Unity':
+        case 'unity':
             await unityGitIgnore(path);
             break;
     }

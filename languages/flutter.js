@@ -1,10 +1,10 @@
-import {byeMessage, errorMessage, henchman} from '../core/constants.js';
+import {byeMessage, henchman} from '../core/constants.js';
 import {errorSpinnerExit, execute} from '../core/utils.js';
-import inquirer from "inquirer";
-import chalk from "chalk";
+import inquirer from 'inquirer';
+import chalk from 'chalk';
 import fs from 'fs/promises';
-import ora from "ora";
-import path from "path";
+import ora from 'ora';
+import path from 'path';
 
 export async function createFlutterPackage(dir){
     const params = [];
@@ -45,6 +45,8 @@ export async function createFlutterPackage(dir){
     try{
         await fs.mkdir(path.join(dir, 'lib/src'), {recursive: true});
         await fs.writeFile(path.join(dir, `lib/src/${projectName}.dart`), '');
+        await fs.appendFile(path.join(dir, '.gitignore'), '\n*ios/\n*android/\n*linux/\n*windows/\n*macos/');
+        await fs.rm(path.join(dir, 'example/test'), {recursive: true, force: true});
     }catch(err){
         errorSpinnerExit(spinner, err);
     }
@@ -183,7 +185,6 @@ export async function folderSetup(dir) {
     }
     
     spinner.succeed(`${henchman}: Setup Complete\n`);
-    console.log(byeMessage);
 }
 
 export async function cleanFlutterProjects(dir) {
@@ -208,5 +209,4 @@ export async function cleanFlutterProjects(dir) {
         errorSpinnerExit(spinner, err);
     }
     spinner.succeed('Cleanup Complete');
-    console.log(byeMessage);
 }

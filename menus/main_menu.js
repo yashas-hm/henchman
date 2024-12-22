@@ -1,7 +1,11 @@
-import inquirer from 'inquirer';
-import {menu} from "../core/utils.js";
+import {menu} from '../core/utils.js';
+import {greetMessage, logo} from '../core/constants.js';
+import {createMenu} from './create.js';
 
 export async function mainMenu(){
+    console.log(logo);
+    console.log(greetMessage);
+    
     const choice = await menu([
         'Create',
         'Cleanup',
@@ -11,5 +15,19 @@ export async function mainMenu(){
         'Stop'
     ],); 
     
-    console.log(choice);
+    switch(choice){
+        case 'Cleanup':
+            break;
+        case 'Create':
+            await createMenu();
+            break;
+        case 'Get':
+            break;
+        case 'Setup':
+            break;
+        case 'Start':
+            break;
+        case 'Stop':
+            break;
+    }
 }

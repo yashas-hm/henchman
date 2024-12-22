@@ -1,14 +1,23 @@
-# Flutter Related
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-*build/
+/build/
 
-# Directory created by dartdoc
-# If you don't generate documentation locally you can remove this line.
-doc/api/
+# Symbolization related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # dotenv environment variables file
 .env*
@@ -22,9 +31,6 @@ doc/api/
 *.js.deps
 *.js.map
 
-.flutter-plugins
-.flutter-plugins-dependencies
-
 *macos/
 *linux/
 *android/
@@ -32,4 +38,6 @@ doc/api/
 *ios/
 *web/
 
-# Credits: https://github.com/github/gitignore
+# Credits: 
+# https://github.com/github/gitignore
+# https://flutter.dev

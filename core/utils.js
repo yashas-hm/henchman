@@ -1,11 +1,15 @@
 import {createCLI} from '../menus/create.js';
 import {Argument, program} from 'commander';
-import {setupCLI} from '../menus/setup.js';
 import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
 import {exec} from 'child_process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import ora from 'ora';
+import fs from 'fs/promises';
+import path from 'path';
+import {baseDir} from "../henchman.js";
+import ini from "ini";
+import {configureCLI} from "../menus/configure.js";
 
 
 export function initCLI() {
@@ -15,8 +19,8 @@ export function initCLI() {
             'CLI tool to reduce development time to execute boilerplate tasks and increase productivity.'
         )
         .addHelpText('beforeAll', `${logo}\n${greetMessage}`);
+    configureCLI();
     createCLI();
-    setupCLI();
     program.parse(process.argv);
 }
 
@@ -105,7 +109,39 @@ export function errorSpinnerExit(spinner, err) {
     console.log(errorMessage);
     console.log(err);
     console.log(err.stack);
-    spinner.fail('Error');
+    spinner.fail(chalk.red('Error'));
     console.log(byeMessage);
     process.exit(1);
+}
+
+export async function getArgumentByMenu(choices, argument, greet){
+    if (greet) {
+        console.log(logo);
+        console.log(greetMessage);
+    }
+
+    if (argument === undefined) {
+        argument = await menu(choices);
+    }
+    
+    return argument.toLowerCase();
+}
+
+export async function getConfig(){
+    const spinner = ora(`${henchman}: Fetching config file...`).start();
+    try{
+        const data = await fs.readFile(path.join(baseDir, 'config.ini'), {encoding: 'utf-8'});
+        const config = ini.parse(data);
+        spinner.succeed(`${henchman} config found`);
+        return config;
+    }catch(err){
+        if(err.code==='ENOENT'){
+            spinner.fail(chalk.red(`${henchman} configuration not found`));
+            console.log('Run \`henchman configure\` command')
+            console.log(byeMessage);
+            process.exit(1);
+        }else{
+            errorSpinnerExit(spinner, err);
+        }
+    }
 }

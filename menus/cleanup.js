@@ -1,8 +1,7 @@
 import {Argument, program} from "commander";
 import chalk from "chalk";
 import {greetMessage, logo} from "../core/constants.js";
-import {getArgumentByMenu, getPath, invalidCommandExit, menu} from "../core/utils.js";
-import {createMenu} from "./create.js";
+import {getArgumentByMenu, getPath} from "../core/utils.js";
 import {cleanNodeProjects} from "../languages/node.js";
 import {cleanFlutterProjects} from "../languages/flutter.js";
 

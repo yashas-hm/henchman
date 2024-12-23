@@ -27,7 +27,7 @@ export async function createRepo(dir) {
         }
     }
 
-    await execute('' +
+    await execute(`cd ${dir};` +
         'git init --initial-branch=main;' +
         'git branch -M main;' +
         'git add .;' +
@@ -113,22 +113,22 @@ export async function pythonGitIgnore(dir) {
     spinner.succeed(`${henchman}: .gitignore modified`);
 }
 
-export async function gitIgnoreByArgument(args) {
+export async function gitIgnoreByArgument(args, dir) {
     switch (args) {
         case 'general':
-            await generalGitIgnore(path);
+            await generalGitIgnore(dir);
             break;
         case 'flutter':
-            await flutterGitIgnore(path);
+            await flutterGitIgnore(dir);
             break;
         case 'node':
-            await nodeGitIgnore(path);
+            await nodeGitIgnore(dir);
             break;
         case 'python':
-            await pythonGitIgnore(path);
+            await pythonGitIgnore(dir);
             break;
         case 'unity':
-            await unityGitIgnore(path);
+            await unityGitIgnore(dir);
             break;
     }
 }

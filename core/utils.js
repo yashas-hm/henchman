@@ -10,6 +10,7 @@ import path from 'path';
 import {baseDir} from "../henchman.js";
 import ini from "ini";
 import {configureCLI} from "../menus/configure.js";
+import {cleanupCLI} from "../menus/cleanup.js";
 
 
 export function initCLI() {
@@ -21,6 +22,7 @@ export function initCLI() {
         .addHelpText('beforeAll', `${logo}\n${greetMessage}`);
     configureCLI();
     createCLI();
+    cleanupCLI();
     program.parse(process.argv);
 }
 

@@ -2,6 +2,7 @@ import {errorSpinnerExit, execute, getConfig} from '../core/utils.js';
 import {byeMessage, henchman} from '../core/constants.js';
 import fs from 'fs/promises';
 import path from 'path';
+import ora from "ora";
 
 export async function createNode(dir) {
     const config = await getConfig();
@@ -37,20 +38,20 @@ export async function emptyNodeStructure(dir) {
     }
 }
 
-export async function cliNodeProject(dir){
+export async function cliNodeProject(dir) {
     const spinner = ora(`${henchman}: Setting up node CLI project`).start();
-    try{
+    try {
         await fs.mkdir(path.join(dir, 'templates'), {recursive: true});
         await fs.mkdir(path.join(dir, 'core'), {recursive: true});
         await fs.mkdir(path.join(dir, 'menus'), {recursive: true});
 
         await fs.writeFile(path.join(dir, 'core/constants.js'), '');
         await fs.writeFile(path.join(dir, 'core/utils.js'), '');
-        
-    }catch(err){
+
+    } catch (err) {
         errorSpinnerExit(spinner, err);
     }
-    
+
     let dependencies = [
         'chalk',
         'commander',
@@ -63,7 +64,7 @@ export async function cliNodeProject(dir){
         `cd ${dir}; npm install --save ${dependencies.join(' ')}`,
         `Adding dependencies`
     );
-    
+
     console.log(byeMessage);
 }
 
@@ -106,7 +107,7 @@ export async function serverNodeStructure(dir) {
     ];
 
     await execute(
-        `cd ${dir}; npm install --save ${dependencies.join(' ')}`, 
+        `cd ${dir}; npm install --save ${dependencies.join(' ')}`,
         `Adding dependencies`
     );
 
@@ -114,7 +115,7 @@ export async function serverNodeStructure(dir) {
         `cd ${dir}; npm install --save-dev nodemon`,
         `Adding dev dependencies`
     );
-    
+
     console.log(byeMessage);
 }
 
@@ -130,4 +131,28 @@ export async function nodeStructureByArgument(args, dir) {
             await cliNodeProject(dir);
             break;
     }
+}
+
+export async function cleanNodeProjects(dir) {
+    console.log('');
+    const spinner = ora(`${henchman}: Cleaning up node_modules\n`).start();
+    try {
+        const files = await fs.readdir(dir);
+        for (const file of files) {
+            const dirPath = path.join(dir, file);
+            const status = await fs.stat(dirPath);
+            if (status.isDirectory()) {
+                const subDir = await fs.readdir(dirPath);
+                if (subDir.includes('node_modules')) {
+                    await fs.rm(
+                        path.join(dir, 'node_modules'), 
+                        {recursive: true, force: true}
+                    );
+                }
+            }
+        }
+    } catch (err) {
+        errorSpinnerExit(spinner, err);
+    }
+    spinner.succeed('Cleanup Complete');
 }

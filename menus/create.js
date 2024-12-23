@@ -8,8 +8,8 @@ import {createNode, nodeStructureByArgument} from "../languages/node.js";
 
 export function createCLI() {
     const create = program.command('create')
-        .argument('[command]')
-        .description('Create new project for Language')
+        .argument('[config]')
+        .description('Create new project for selected language')
         .action(async (_) => {
             console.log(logo);
             console.log(greetMessage);
@@ -86,9 +86,9 @@ export async function gitCreateMenu(argument = undefined, greet = false) {
         argument,
         greet
     );
-    let path = getPath();
-    await gitIgnoreByArgument(argument);
-    await createRepo(path);
+    let dir = getPath();
+    await gitIgnoreByArgument(argument, dir);
+    await createRepo(dir);
 }
 
 export async function nodeCreateMnu(argument = undefined, greet = false) {

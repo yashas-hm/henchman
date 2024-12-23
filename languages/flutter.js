@@ -189,7 +189,7 @@ export async function folderSetup(dir) {
 
 export async function cleanFlutterProjects(dir) {
     console.log('');
-    const spinner = ora(`${henchman}: Cleaning up flutter projects\n`).start();
+    const spinner = ora(`${henchman}: Cleaning up build files\n`).start();
     try{
         const files = await fs.readdir(dir);
         for(const file of files){

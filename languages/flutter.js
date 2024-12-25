@@ -1,4 +1,4 @@
-import {byeMessage, henchman} from '../core/constants.js';
+import {henchman} from '../core/constants.js';
 import {errorSpinnerExit, execute} from '../core/utils.js';
 import inquirer from 'inquirer';
 import chalk from 'chalk';

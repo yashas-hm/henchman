@@ -4,7 +4,7 @@ import {cliArgument, getArgumentByMenu, getPath, invalidCommandExit, menu} from 
 import inquirer from 'inquirer';
 import {createFlutter, createFlutterPackage} from '../languages/flutter.js';
 import {createRepo, gitIgnoreByArgument,} from '../languages/git.js';
-import {createNode, nodeStructureByArgument} from "../languages/node.js";
+import {createNode, nodeStructureByArgument} from '../languages/node.js';
 
 export function createCLI() {
     const create = program.command('create')
@@ -16,8 +16,7 @@ export function createCLI() {
             } else {
                 await createMenu();
             }
-        })
-        .addHelpText('beforeAll', `${logo}${greetMessage}`);
+        });
 
     cliArgument(
         create,

@@ -1,26 +1,66 @@
-import {errorSpinnerExit, execute, getConfig} from '../core/utils.js';
+import {errorExit, errorSpinnerExit, execute, getConfig} from '../core/utils.js';
 import {byeMessage, henchman} from '../core/constants.js';
 import fs from 'fs/promises';
 import path from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
+import inquirer from 'inquirer';
 
 export async function createNode(dir) {
     const config = await getConfig();
-    const name = config.node.name;
-    const url = config.node.url;
-    const license = config.node.license;
+    let name = config.node.name;
+    let url = config.node.url;
+    let license = config.node.license;
     const params = [];
+    const prompt = [];
+    
+    if(name===undefined){
+        prompt.push({
+            type: 'input',
+            name: 'name',
+            message: `${henchman}: Enter your name`,
+        });
+    }
+    
+    if(url===undefined){
+        prompt.push({
+            type: 'input',
+            name: 'url',
+            message: `${henchman}: Enter your url ${chalk.grey('(Optional)')}`,
+        });
+    }
+    
+    if(license===undefined){
+        prompt.push({
+            type: 'input',
+            name: 'license',
+            message: `${henchman}: Enter license`,
+            default: 'MIT',
+        });
+    }
+    
+    if(prompt.length!==0){
+        console.log(`${henchman}: Run \`henchman configure\` to set a default data\n`);
+        const answers = await inquirer.prompt(prompt);
 
-    if (name !== undefined) {
+        name = answers['name'];
+        url = answers['url'];
+        license = answers['license'];   
+    }
+    
+    if (name !== undefined||name!=='') {
         params.push(`--init-author-name "${name}"`);
+    }else{
+        errorExit(`${henchman}: Name cannot be empty`);   
     }
 
-    if (url !== undefined) {
+    if (url !== undefined||name!=='') {
         params.push(`--init-author-url "${url}"`);
     }
 
-    params.push(`--init-license "${license}`);
+    if(license!==undefined||name!==''){
+        params.push(`--init-license "${license}`);   
+    }
 
     await execute(
         `cd ${dir}; npm init ${params.join(' ')} --yes`,

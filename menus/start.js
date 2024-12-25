@@ -1,7 +1,7 @@
-import {program} from "commander";
-import {cliArgument, execute, getConfig, invalidCommandExit, menu} from "../core/utils.js";
-import {byeMessage, greetMessage, henchman, logo} from "../core/constants.js";
-import inquirer from "inquirer";
+import {program} from 'commander';
+import {cliArgument, errorExit, execute, getConfig, invalidCommandExit, menu} from '../core/utils.js';
+import {byeMessage, greetMessage, henchman, logo} from '../core/constants.js';
+import inquirer from 'inquirer';
 
 export function startCLI() {
     const start = program.command('start')
@@ -13,15 +13,14 @@ export function startCLI() {
             } else {
                 await startMenu();
             }
-        })
-        .addHelpText('beforeAll', `${logo}${greetMessage}`);
+        });
 
     cliArgument(
         start,
         'sim',
         'Start android or iOS simulator',
         ['android', 'ios'],
-        (args) => startSimMenu(args)
+        (args) => startSimMenu(args, true)
     );
 }
 
@@ -35,15 +34,28 @@ export function startCLI() {
 
 export async function startAndroidSim() {
     const config = await getConfig();
-
-    if (config.node.emulator === undefined) {
-        console.log(`${henchman}: Emulator config not found. Run \`henchman configure\` to set default emulator`);
-    } else {
-        await execute(
-            `emulator @${config.node.emulator}`,
-            'Starting Android Simulator'
-        );
+    let emulator = config.sim.emulator;
+    if (emulator === undefined) {
+        console.log(`${henchman}: Run \`henchman configure\` to set a default emulator`);
+        const answer = await inquirer.prompt({
+            type:'input',
+            name: 'emulator',
+            message: `${henchman}: Enter emulator name`
+        });
+        
+        if(answer['emulator']===''){
+            errorExit(`${henchman}: Emulator name cannot be empty`);
+        }else{
+            emulator = answer['emulator'];
+        }
     }
+
+    await execute(
+        `emulator @${emulator}`,
+        'Starting Android Simulator'
+    );
+    
+    console.log(byeMessage);
 }
 
 export async function startIOSSim() {
@@ -52,9 +64,14 @@ export async function startIOSSim() {
     } else {
         await execute('open -a simulator', 'Starting iOS Simulator');
     }
+    console.log(byeMessage);
 }
 
-export async function startSimMenu(args = undefined) {
+export async function startSimMenu(args = undefined, greet = false) {
+    if (greet) {
+        console.log(logo);
+        console.log(greetMessage);
+    }
     if (args === undefined) {
         const sims = await inquirer.prompt({
             type: 'checkbox',
@@ -69,7 +86,6 @@ export async function startSimMenu(args = undefined) {
         if (sims['sims'].includes('android')) {
             await startAndroidSim();
         }
-        console.log(byeMessage);
     } else {
         switch (args) {
             case 'android':
@@ -79,21 +95,19 @@ export async function startSimMenu(args = undefined) {
                 await startIOSSim();
                 break;
         }
-        console.log(byeMessage);
     }
 }
 
 export async function startMenu() {
     console.log(logo);
     console.log(greetMessage);
-    const answer = await menu(['Android Simulator', 'iOS Simulator']);
+    const answer = await menu(['Start Android Simulator', 'Start iOS Simulator']);
     switch (answer) {
-        case 'Android Simulator':
+        case 'Start Android Simulator':
             await startAndroidSim();
             break;
-        case 'iOS Simulator':
+        case 'Start iOS Simulator':
             await startIOSSim();
             break;
     }
-    console.log(byeMessage);
 }

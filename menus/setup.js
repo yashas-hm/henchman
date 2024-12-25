@@ -17,8 +17,7 @@ export function setupCLI() {
             } else {
                 await setupMenu();
             }
-        })
-        .addHelpText('beforeAll', `${logo}${greetMessage}`);
+        });
 
     cliArgument(
         setup,

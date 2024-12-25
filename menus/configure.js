@@ -25,28 +25,39 @@ export async function configure() {
         {
             type: 'input',
             name: 'name',
-            message: `${henchman}: Enter your name:`,
+            message: `${henchman}: Enter your name`,
+            default: oldConfig.node.name,
         },
         {
             type: 'input',
             name: 'url',
-            message: `${henchman}: Enter your website url:`,
+            message: `${henchman}: Enter your website url`,
+            default: oldConfig.node.url,
         },
         {
             type: 'input',
             name: 'license',
-            message: `${henchman}: Enter default license ${chalk.grey('(MIT)')}:`,
+            message: `${henchman}: Enter default license`,
+            default: oldConfig.node.license,
         },
         {
             type: 'input',
             name: 'emulator',
-            message: `${henchman}: Enter default android emulator name ${chalk.yellow('(Run \'emulator -list-avds\' to get list of emulators)')}:`,
+            message: `${henchman}: Enter default android emulator name ${chalk.yellow('(Run \'emulator -list-avds\' to get list of emulators)')}`,
+            default: oldConfig.sim.emulator,
+        },
+        {
+            type: 'input',
+            name: 'sha',
+            message: `${henchman}: Enter default android debug keystore path`,
+            default: oldConfig.sha.path,
         }
     ]);
     let name = answers['name'];
     let url = answers['url'];
     let license = answers['license'];
     let emulator = answers['emulator']
+    let sha = answers['sha'];
     const data = ['[node]'];
 
     if (name !== '') {
@@ -67,16 +78,6 @@ export async function configure() {
         }
     }
 
-    if (emulator !== '') {
-        data.push(`emulator=${emulator}`);
-    } else {
-        emulator = oldConfig.node.emulator;
-        if (emulator !== undefined) {
-            data.push(`emulator=${emulator}`);
-        }
-    }
-
-
     if (license !== '') {
         data.push(`license=${license}`);
     } else {
@@ -85,6 +86,28 @@ export async function configure() {
             data.push(`license=${license}`);
         } else {
             data.push('license=MIT')
+        }
+    }
+
+    data.push('[sim]');
+
+    if (emulator !== '') {
+        data.push(`emulator=${emulator}`);
+    } else {
+        emulator = oldConfig.sim.emulator;
+        if (emulator !== undefined) {
+            data.push(`emulator=${emulator}`);
+        }
+    }
+
+    data.push('[sha]');
+
+    if (sha !== '') {
+        data.push(`path=${sha}`);
+    } else {
+        sha = oldConfig.sha.path;
+        if (sha !== undefined) {
+            data.push(`path=${sha}`);
         }
     }
 

@@ -9,21 +9,20 @@ import {cleanPythonProjects} from '../languages/python.js';
 export function cleanupCLI() {
     const choices = ['flutter', 'node', 'python'];
     program.command('cleanup')
-        .addArgument(new Argument('[argument]')
+        .addArgument(new Argument('[config]')
             .choices(choices)
         )
         .description(
             `${chalk.blue('Cleanup projects for selected language in input subfolders')}\n` +
             chalk.yellow(
                 '' +
-                '[config] options:\n' +
-                `${choices.join('\n')}`
+                '[config] options: ' +
+                `${choices.join(', ')}`
             )
         )
         .action(async (argument) => {
             await cleanupMenu(argument);
-        })
-        .addHelpText('beforeAll', `${logo}${greetMessage}`);
+        });
 }
 
 export async function cleanupMenu(argument=undefined) {

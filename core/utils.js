@@ -1,19 +1,20 @@
-import {createCLI} from '../menus/create.js';
-import {Argument, program} from 'commander';
-import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
-import {exec} from 'child_process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import ora from 'ora';
 import fs from 'fs/promises';
 import path from 'path';
-import {baseDir} from '../henchman.js';
 import ini from 'ini';
+import {Argument, program} from 'commander';
+import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
+import child_process from 'child_process';
+import util from 'util';
+import {baseDir} from '../henchman.js';
 import {configureCLI} from '../menus/configure.js';
 import {cleanupCLI} from '../menus/cleanup.js';
-import {setupCLI} from "../menus/setup.js";
-import {startCLI} from "../menus/start.js";
-
+import {setupCLI} from '../menus/setup.js';
+import {startCLI} from '../menus/start.js';
+import {getCLI} from '../menus/get.js';
+import {createCLI} from '../menus/create.js';
 
 export function initCLI() {
     program.name('henchman')
@@ -27,6 +28,7 @@ export function initCLI() {
     cleanupCLI();
     setupCLI();
     startCLI();
+    getCLI();
     program.parse(process.argv);
 }
 
@@ -52,18 +54,11 @@ export async function getPath() {
     return inputPath;
 }
 
-export async function execute(command, description) {
-    const spinner = ora(`${henchman} ${description ?? 'running command ...'}\n`).start();
-    await new Promise((resolve, reject) => {
-        exec(command, (err, _, stdin) => {
-            if (err !== null) {
-                reject(err);
-            } else {
-                console.log(stdin);
-                resolve();
-            }
-        })
-    }).catch((err) => errorSpinnerExit(spinner, err));
+export async function execute(command, message) {
+    const spinner = ora(`${henchman} ${message ?? 'running command ...'}\n`).start();
+    const exec = util.promisify(child_process.exec);
+    const {stdout} = await exec(command).catch((err)=>errorSpinnerExit(spinner, err));
+    console.log(stdout);
     spinner.succeed('Done');
 }
 
@@ -110,7 +105,7 @@ export function invalidCommandExit() {
     console.log(greetMessage);
     console.log(chalk.red('Invalid Command\n'))
     console.log(program.helpInformation());
-    process.exit(1);
+    program.error(byeMessage, {exitCode: 1});
 }
 
 export function errorSpinnerExit(spinner, err) {
@@ -118,8 +113,12 @@ export function errorSpinnerExit(spinner, err) {
     console.log(err);
     console.log(err.stack);
     spinner.fail(chalk.red('Error'));
-    console.log(byeMessage);
-    process.exit(1);
+    program.error(byeMessage, {exitCode: 1});
+}
+
+export function errorExit(message){
+    console.log(message);
+    program.error(byeMessage, {exitCode: 1});
 }
 
 export async function getArgumentByMenu(choices, argument, greet){

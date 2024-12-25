@@ -1,6 +1,5 @@
-# 🧌 Henchman: CLI for Developers
-
-**Version 1.0.0**
+# 🧌 Henchman: The Dev Sidekick You Didn’t Know You Needed.
+**Version 1.0.1**
 
 Henchman CLI is an all-in-one, interactive command-line tool designed to simplify the creation, setup, and management of
 development projects. Whether you’re working on Flutter, Node.js, or managing Git repositories, Henchman streamlines

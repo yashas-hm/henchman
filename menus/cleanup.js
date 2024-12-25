@@ -1,9 +1,10 @@
-import {Argument, program} from "commander";
-import chalk from "chalk";
-import {greetMessage, logo} from "../core/constants.js";
-import {getArgumentByMenu, getPath} from "../core/utils.js";
-import {cleanNodeProjects} from "../languages/node.js";
-import {cleanFlutterProjects} from "../languages/flutter.js";
+import {Argument, program} from 'commander';
+import chalk from 'chalk';
+import {byeMessage, greetMessage, logo} from '../core/constants.js';
+import {getArgumentByMenu, getPath} from '../core/utils.js';
+import {cleanNodeProjects} from '../languages/node.js';
+import {cleanFlutterProjects} from '../languages/flutter.js';
+import {cleanPythonProjects} from '../languages/python.js';
 
 export function cleanupCLI() {
     const choices = ['flutter', 'node', 'python'];
@@ -20,25 +21,26 @@ export function cleanupCLI() {
             )
         )
         .action(async (argument) => {
-            console.log(logo);
-            console.log(greetMessage);
-            await cleanupMenu(argument, choices);
+            await cleanupMenu(argument);
         })
         .addHelpText('beforeAll', `${logo}${greetMessage}`);
 }
 
-export async function cleanupMenu(argument, choices){
-    argument = await getArgumentByMenu(choices, argument, false);
+export async function cleanupMenu(argument=undefined) {
+    console.log(logo);
+    console.log(greetMessage);
+    argument = await getArgumentByMenu(['flutter', 'node', 'python'], argument, false);
     const dir = await getPath();
-    console.log(dir);
-    switch (argument){
+    switch (argument) {
         case 'flutter':
             await cleanFlutterProjects(dir);
             break;
         case 'python':
+            await cleanPythonProjects(dir);
             break;
         case 'node':
             await cleanNodeProjects(dir);
             break;
     }
+    console.log(byeMessage);
 } 

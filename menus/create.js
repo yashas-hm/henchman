@@ -11,8 +11,6 @@ export function createCLI() {
         .argument('[config]')
         .description('Create new project for selected language')
         .action(async (_) => {
-            console.log(logo);
-            console.log(greetMessage);
             if (_ !== undefined) {
                 invalidCommandExit();
             } else {
@@ -34,7 +32,7 @@ export function createCLI() {
         'node',
         'Create new node project',
         ['empty', 'server', 'cli'],
-        (args) => nodeCreateMnu(args, true),
+        (args) => nodeCreateMenu(args, true),
     );
 
     cliArgument(
@@ -44,19 +42,11 @@ export function createCLI() {
         ['general', 'flutter', 'node', 'python', 'unity'],
         (args) => gitCreateMenu(args, true),
     );
-
-    create
-        .command('python')
-        .action((argument) => console.log(argument));
-
-    create
-        .command('bash')
-        .action((argument) => console.log(argument));
 }
 
 export async function flutterCreateMenu(argument = undefined, greet = true) {
     argument = await getArgumentByMenu(['app', 'package'], argument, greet);
-    let path = '';
+    let dir = '';
     switch (argument) {
         case 'app':
             const platforms = await inquirer.prompt([
@@ -68,15 +58,14 @@ export async function flutterCreateMenu(argument = undefined, greet = true) {
                     default: ['android', 'ios'],
                 }
             ]);
-            path = await getPath();
-            await createFlutter(path, platforms['platforms']);
+            dir = await getPath();
+            await createFlutter(dir, platforms['platforms']);
             break;
         case 'package':
-            path = await getPath();
-            await createFlutterPackage(path);
+            dir = await getPath();
+            await createFlutterPackage(dir);
             break;
     }
-
     console.log(byeMessage);
 }
 
@@ -89,22 +78,24 @@ export async function gitCreateMenu(argument = undefined, greet = false) {
     let dir = getPath();
     await gitIgnoreByArgument(argument, dir);
     await createRepo(dir);
+    console.log(byeMessage);
 }
 
-export async function nodeCreateMnu(argument = undefined, greet = false) {
+export async function nodeCreateMenu(argument = undefined, greet = false) {
     argument = await getArgumentByMenu(['empty', 'server', 'cli'], argument, greet);
     const dir = await getPath();
     await createNode(dir);
     await nodeStructureByArgument(argument, dir);
+    console.log(byeMessage);
 }
 
 export async function createMenu() {
+    console.log(logo);
+    console.log(greetMessage);
     const answer = await menu([
         'Flutter',
         'Node',
-        'Python',
         'Git',
-        'Bash'
     ],);
 
     switch (answer) {
@@ -112,14 +103,10 @@ export async function createMenu() {
             await flutterCreateMenu();
             break;
         case 'Node':
-            await nodeCreateMnu();
-            break;
-        case 'Python':
+            await nodeCreateMenu();
             break;
         case 'Git':
             await gitCreateMenu();
-            break;
-        case 'Bash':
             break;
     }
 }

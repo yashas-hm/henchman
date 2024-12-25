@@ -2,7 +2,8 @@ import {errorSpinnerExit, execute, getConfig} from '../core/utils.js';
 import {byeMessage, henchman} from '../core/constants.js';
 import fs from 'fs/promises';
 import path from 'path';
-import ora from "ora";
+import ora from 'ora';
+import chalk from 'chalk';
 
 export async function createNode(dir) {
     const config = await getConfig();
@@ -32,7 +33,6 @@ export async function emptyNodeStructure(dir) {
     try {
         await fs.writeFile(path.join(dir, 'index.js'));
         spinner.succeed(`${henchman}: Setup Complete\n`);
-        console.log(byeMessage);
     } catch (err) {
         errorSpinnerExit(spinner, err);
     }
@@ -64,8 +64,6 @@ export async function cliNodeProject(dir) {
         `cd ${dir}; npm install --save ${dependencies.join(' ')}`,
         `Adding dependencies`
     );
-
-    console.log(byeMessage);
 }
 
 export async function serverNodeStructure(dir) {
@@ -89,7 +87,6 @@ export async function serverNodeStructure(dir) {
         await fs.writeFile(path.join(dir, 'docs/components.js'), '');
         await fs.writeFile(path.join(dir, 'server.js'), '');
         spinner.succeed(`${henchman}: Setup Complete\n`);
-        console.log(byeMessage);
     } catch (err) {
         errorSpinnerExit(spinner, err);
     }
@@ -115,8 +112,6 @@ export async function serverNodeStructure(dir) {
         `cd ${dir}; npm install --save-dev nodemon`,
         `Adding dev dependencies`
     );
-
-    console.log(byeMessage);
 }
 
 export async function nodeStructureByArgument(args, dir) {
@@ -144,6 +139,7 @@ export async function cleanNodeProjects(dir) {
             if (status.isDirectory()) {
                 const subDir = await fs.readdir(dirPath);
                 if (subDir.includes('node_modules')) {
+                    console.log(`${henchman}: Cleaning up node_modules in ${chalk.blue(dirPath)}`);
                     await fs.rm(
                         path.join(dir, 'node_modules'), 
                         {recursive: true, force: true}

@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
-import {baseDir} from "../henchman.js";
-import {byeMessage, henchman} from "../core/constants.js";
-import {errorSpinnerExit, execute} from "../core/utils.js";
-import ora from "ora";
+import {baseDir} from '../henchman.js';
+import {byeMessage, henchman} from '../core/constants.js';
+import {errorSpinnerExit, execute} from '../core/utils.js';
+import ora from 'ora';
 
 export async function createRepo(dir) {
     const remote = await inquirer.prompt({
@@ -36,8 +36,6 @@ export async function createRepo(dir) {
         'git push -u origin main',
         'Creating new GIT repository'
     );
-
-    console.log(byeMessage);
 }
 
 export async function generalGitIgnore(dir) {

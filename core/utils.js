@@ -7,10 +7,12 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import fs from 'fs/promises';
 import path from 'path';
-import {baseDir} from "../henchman.js";
-import ini from "ini";
-import {configureCLI} from "../menus/configure.js";
-import {cleanupCLI} from "../menus/cleanup.js";
+import {baseDir} from '../henchman.js';
+import ini from 'ini';
+import {configureCLI} from '../menus/configure.js';
+import {cleanupCLI} from '../menus/cleanup.js';
+import {setupCLI} from "../menus/setup.js";
+import {startCLI} from "../menus/start.js";
 
 
 export function initCLI() {
@@ -23,6 +25,8 @@ export function initCLI() {
     configureCLI();
     createCLI();
     cleanupCLI();
+    setupCLI();
+    startCLI();
     program.parse(process.argv);
 }
 
@@ -102,6 +106,8 @@ export function cliArgument(program, command, commandDesc, argChoices, action) {
 }
 
 export function invalidCommandExit() {
+    console.log(logo);
+    console.log(greetMessage);
     console.log(chalk.red('Invalid Command\n'))
     console.log(program.helpInformation());
     process.exit(1);
@@ -129,7 +135,7 @@ export async function getArgumentByMenu(choices, argument, greet){
     return argument.toLowerCase();
 }
 
-export async function getConfig(){
+export async function getConfig(noError=false){
     const spinner = ora(`${henchman}: Fetching config file...`).start();
     try{
         const data = await fs.readFile(path.join(baseDir, 'config.ini'), {encoding: 'utf-8'});
@@ -139,9 +145,13 @@ export async function getConfig(){
     }catch(err){
         if(err.code==='ENOENT'){
             spinner.fail(chalk.red(`${henchman} configuration not found`));
-            console.log('Run \`henchman configure\` command')
-            console.log(byeMessage);
-            process.exit(1);
+            if(noError){
+                return {};
+            }else{
+                console.log('Run \`henchman configure\` command')
+                console.log(byeMessage);
+                process.exit(1);   
+            }
         }else{
             errorSpinnerExit(spinner, err);
         }

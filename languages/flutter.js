@@ -41,17 +41,23 @@ export async function createFlutterPackage(dir){
     await execute(`flutter create ${dir} ${params.join(' ')}`, 'Creating Flutter Package');
     await execute(`flutter create -e ${dir}/example`, 'Creating Flutter Example');
     
+    await setupFlutterPackageStructure(dir);
+}
+
+export async function setupFlutterPackageStructure(dir){
     const spinner = ora(`${henchman}: Initializing setup for Flutter Package`).start();
     try{
         await fs.mkdir(path.join(dir, 'lib/src'), {recursive: true});
         await fs.writeFile(path.join(dir, `lib/src/${projectName}.dart`), '');
         await fs.appendFile(path.join(dir, '.gitignore'), '\n*ios/\n*android/\n*linux/\n*windows/\n*macos/');
-        await fs.rm(path.join(dir, 'example/test'), {recursive: true, force: true});
+        await fs.rm(
+            path.join(dir, 'example/test'),
+            {recursive: true, force: true}
+        ).catch((_)=>{});
     }catch(err){
         errorSpinnerExit(spinner, err);
     }
     spinner.succeed(`${henchman}: Setup Complete`);
-    console.log(byeMessage);
 }
 
 export async function createFlutter(path, platforms) {
@@ -107,7 +113,7 @@ export async function createFlutter(path, platforms) {
 
     await addDependencies(path, platforms);
 
-    await folderSetup(path);
+    await setupFlutterAppStructure(path);
 }
 
 export async function addDependencies(path, platforms) {
@@ -146,7 +152,7 @@ export async function addDependencies(path, platforms) {
     }
 }
 
-export async function folderSetup(dir) {
+export async function setupFlutterAppStructure(dir) {
     console.log('');
     const spinner = ora(`${henchman}: Initializing folder structure setup\n`).start();
     try{
@@ -198,6 +204,7 @@ export async function cleanFlutterProjects(dir) {
             if(status.isDirectory()){
                 const subDir = await fs.readdir(dirPath);
                 if(subDir.includes('pubspec.yaml')){
+                    console.log(`${henchman}: Cleaning up build files in ${chalk.blue(dirPath)}`);
                     await execute(
                         `cd ${dirPath}; flutter clean build`, 
                         `Cleaning Flutter in ${dirPath}`

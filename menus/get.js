@@ -59,10 +59,10 @@ export async function getDebugSHA() {
         message: `${henchman}: Enter android debug keystore password ${chalk.grey('(default: android)')}`,
     });
     let pass = answer['pass'];
-    if(pass===''){
-        pass='android';
+    if (pass === '') {
+        pass = 'android';
     }
-    
+
     await execute(
         `keytool -list -v -alias androiddebugkey -keystore ${debugKeyPath} -storepass ${pass}`,
         'Fetching debug SHA key...'

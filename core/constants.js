@@ -6,7 +6,7 @@ export const byeMessage = `${henchman}: Bye, have a great day.`;
 export const errorMessage = `${henchman}: Unexpected error occurred, below is the error and stacktrace:\n`;
 
 export const logo = chalk.green(
-    '\n'+
+    '\n' +
     '╭╮╱╭╮╱╱╱╱╱╱╱╱╭╮\n' +
     '┃┃╱┃┃╱╱╱╱╱╱╱╱┃┃\n' +
     '┃╰━╯┣━━┳━╮╭━━┫╰━┳╮╭┳━━┳━╮\n' +

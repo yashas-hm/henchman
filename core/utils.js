@@ -58,7 +58,7 @@ export async function execute(command, message) {
     console.log(`${command}`);
     const spinner = ora(`${henchman} ${message ?? 'running command ...'}\n`).start();
     const exec = util.promisify(child_process.exec);
-    const {stdout} = await exec(command).catch((err)=>errorSpinnerExit(spinner, err));
+    const {stdout} = await exec(command).catch((err) => errorSpinnerExit(spinner, err));
     console.log(stdout);
     spinner.succeed('Done');
 }
@@ -109,22 +109,22 @@ export function invalidCommandExit() {
     program.error(byeMessage, {exitCode: 1});
 }
 
-export function errorSpinnerExit(spinner=undefined, err) {
+export function errorSpinnerExit(spinner = undefined, err) {
     console.log(errorMessage);
     console.log(err);
     console.log(err.stack);
-    if(spinner!==undefined){
-        spinner.fail(chalk.red('Error'));   
+    if (spinner !== undefined) {
+        spinner.fail(chalk.red('Error'));
     }
     program.error(byeMessage, {exitCode: 1});
 }
 
-export function errorExit(message){
+export function errorExit(message) {
     console.log(message);
     program.error(byeMessage, {exitCode: 1});
 }
 
-export async function getArgumentByMenu(choices, argument, greet){
+export async function getArgumentByMenu(choices, argument, greet) {
     if (greet) {
         console.log(logo);
         console.log(greetMessage);
@@ -133,28 +133,28 @@ export async function getArgumentByMenu(choices, argument, greet){
     if (argument === undefined) {
         argument = await menu(choices);
     }
-    
+
     return argument.toLowerCase();
 }
 
-export async function getConfig(noError=false){
+export async function getConfig(noError = false) {
     const spinner = ora(`${henchman}: Fetching config file...`).start();
-    try{
+    try {
         const data = await fs.readFile(path.join(baseDir, 'config.ini'), {encoding: 'utf-8'});
         const config = ini.parse(data);
         spinner.succeed(`${henchman} config found`);
         return config;
-    }catch(err){
-        if(err.code==='ENOENT'){
+    } catch (err) {
+        if (err.code === 'ENOENT') {
             spinner.fail(chalk.red(`${henchman} configuration not found`));
-            if(noError){
+            if (noError) {
                 return {};
-            }else{
+            } else {
                 console.log('Run \`henchman configure\` command')
                 console.log(byeMessage);
-                process.exit(1);   
+                process.exit(1);
             }
-        }else{
+        } else {
             errorSpinnerExit(spinner, err);
         }
     }

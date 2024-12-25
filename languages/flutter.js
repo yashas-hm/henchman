@@ -6,7 +6,7 @@ import fs from 'fs/promises';
 import ora from 'ora';
 import path from 'path';
 
-export async function createFlutterPackage(dir){
+export async function createFlutterPackage(dir) {
     const params = [];
     console.log(`${henchman}: Creating flutter package`);
     const answers = await inquirer.prompt([
@@ -37,24 +37,25 @@ export async function createFlutterPackage(dir){
     params.push(`--project-name="${projectName}"`);
     params.push(`--description="${description}"`);
     params.push(`--template=package`);
-   
+
     await execute(`flutter create ${dir} ${params.join(' ')}`, 'Creating Flutter Package');
     await execute(`flutter create -e ${dir}/example`, 'Creating Flutter Example');
-    
+
     await setupFlutterPackageStructure(dir);
 }
 
-export async function setupFlutterPackageStructure(dir){
+export async function setupFlutterPackageStructure(dir) {
     const spinner = ora(`${henchman}: Initializing setup for Flutter Package`).start();
-    try{
+    try {
         await fs.mkdir(path.join(dir, 'lib/src'), {recursive: true});
         await fs.writeFile(path.join(dir, `lib/src/${projectName}.dart`), '');
         await fs.appendFile(path.join(dir, '.gitignore'), '\n*ios/\n*android/\n*linux/\n*windows/\n*macos/');
         await fs.rm(
             path.join(dir, 'example/test'),
             {recursive: true, force: true}
-        ).catch((_)=>{});
-    }catch(err){
+        ).catch((_) => {
+        });
+    } catch (err) {
         errorSpinnerExit(spinner, err);
     }
     spinner.succeed(`${henchman}: Setup Complete`);
@@ -134,7 +135,7 @@ export async function addDependencies(path, platforms) {
     }
 
     await execute(
-        `cd ${path}; flutter pub add ${dependencies.join(' ')}`, 
+        `cd ${path}; flutter pub add ${dependencies.join(' ')}`,
         'Adding dependencies'
     );
 
@@ -146,7 +147,7 @@ export async function addDependencies(path, platforms) {
             'flutter_launcher_icons',
         ];
         await execute(
-            `cd ${path}; flutter pub add -d ${dependencies.join(' ')}`, 
+            `cd ${path}; flutter pub add -d ${dependencies.join(' ')}`,
             'Adding dev dependencies'
         );
     }
@@ -155,7 +156,7 @@ export async function addDependencies(path, platforms) {
 export async function setupFlutterAppStructure(dir) {
     console.log('');
     const spinner = ora(`${henchman}: Initializing folder structure setup\n`).start();
-    try{
+    try {
         await fs.mkdir(path.join(dir, 'assets'), {recursive: true});
         await fs.mkdir(path.join(dir, 'assets/fonts'), {recursive: true});
         await fs.mkdir(path.join(dir, 'assets/anim'), {recursive: true});
@@ -166,53 +167,53 @@ export async function setupFlutterAppStructure(dir) {
         await fs.mkdir(path.join(dir, 'lib/pages'), {recursive: true});
         await fs.mkdir(path.join(dir, 'lib/core'), {recursive: true});
         await fs.mkdir(path.join(dir, 'lib/providers'), {recursive: true});
-        
+
         await fs.mkdir(path.join(dir, 'lib/core/constants'), {recursive: true});
         await fs.mkdir(path.join(dir, 'lib/core/error'), {recursive: true});
         await fs.mkdir(path.join(dir, 'lib/core/utilities'), {recursive: true});
         await fs.mkdir(path.join(dir, 'lib/core/models'), {recursive: true});
 
         await fs.mkdir(path.join(dir, 'docs'), {recursive: true});
-        
+
         await fs.writeFile(path.join(dir, 'lib/core/utilities/utils.dart'), '');
         await fs.writeFile(path.join(dir, 'lib/core/utilities/snackbar_utils.dart'), '');
         await fs.writeFile(path.join(dir, 'lib/core/utilities/extensions.dart'), '');
-        
+
         await fs.writeFile(path.join(dir, 'lib/core/constants/constants.dart'), '');
         await fs.writeFile(path.join(dir, 'lib/core/constants/colors.dart'), '');
         await fs.writeFile(path.join(dir, 'lib/core/constants/theme.dart'), '');
-        
+
         await fs.writeFile(path.join(dir, 'lib/core/error/exceptions.dart'), '');
         await fs.writeFile(path.join(dir, 'lib/core/error/fallback_objects.dart'), '');
 
         await fs.writeFile(path.join(dir, 'docs/documentations.md'), '');
-    }catch(err){
+    } catch (err) {
         errorSpinnerExit(spinner, err);
     }
-    
+
     spinner.succeed(`${henchman}: Setup Complete\n`);
 }
 
 export async function cleanFlutterProjects(dir) {
     console.log('');
     const spinner = ora(`${henchman}: Cleaning up build files\n`).start();
-    try{
+    try {
         const files = await fs.readdir(dir);
-        for(const file of files){
+        for (const file of files) {
             const dirPath = path.join(dir, file);
             const status = await fs.stat(dirPath);
-            if(status.isDirectory()){
+            if (status.isDirectory()) {
                 const subDir = await fs.readdir(dirPath);
-                if(subDir.includes('pubspec.yaml')){
+                if (subDir.includes('pubspec.yaml')) {
                     console.log(`${henchman}: Cleaning up build files in ${chalk.blue(dirPath)}`);
                     await execute(
-                        `cd ${dirPath}; flutter clean build`, 
+                        `cd ${dirPath}; flutter clean build`,
                         `Cleaning Flutter in ${dirPath}`
                     );
                 }
             }
         }
-    }catch (err){
+    } catch (err) {
         errorSpinnerExit(spinner, err);
     }
     spinner.succeed('Cleanup Complete');

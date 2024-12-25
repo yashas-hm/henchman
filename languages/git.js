@@ -42,7 +42,7 @@ export async function generalGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding general .gitignore`).start();
     try {
         const data = await fs.readFile(
-            path.join(baseDir, 'templates/gitignore/git.txt'), 
+            path.join(baseDir, 'templates/gitignore/git.txt'),
             {encoding: 'utf8'}
         );
         await fs.writeFile(path.join(dir, '.gitignore'), data);
@@ -71,7 +71,7 @@ export async function unityGitIgnore(dir) {
     const spinner = ora(`${henchman}: Adding Unity .gitignore`).start();
     try {
         const data = await fs.readFile(
-            path.join(baseDir, 'templates/gitignore/git_unity.txt'), 
+            path.join(baseDir, 'templates/gitignore/git_unity.txt'),
             {encoding: 'utf8'}
         );
         await fs.writeFile(path.join(dir, '.gitignore'), data);

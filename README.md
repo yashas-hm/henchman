@@ -17,7 +17,7 @@ remembering lengthy commands.
 
 ### 2. **Project Creation**
 
-- **Node Projects**: 
+- **Node Projects**:
     - Empty: Create empty node project
     - Server: Create express server with dependencies
     - CLI: Create node CLI with dependencies
@@ -74,6 +74,7 @@ Ensure you have the following tools installed and added to your PATH:
 Additionally, add these to your shell initialization script (e.g., `.bashrc`, `.zshrc`, `PATH`):
 
 #### For MacOS
+
 ```bash
 # Homebrew (Mac users)
 eval "$($(brew --prefix)/bin/brew shellenv)"
@@ -111,7 +112,7 @@ Follow the interactive prompts to select your desired task.
 
 - Create a Node Project
 - Create a Flutter Application
-- 
+
 ### **Project Structure Setup**
 
 - Setup Flutter Project Structure

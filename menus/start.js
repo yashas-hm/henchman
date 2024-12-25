@@ -38,14 +38,14 @@ export async function startAndroidSim() {
     if (emulator === undefined) {
         console.log(`${henchman}: Run \`henchman configure\` to set a default emulator`);
         const answer = await inquirer.prompt({
-            type:'input',
+            type: 'input',
             name: 'emulator',
             message: `${henchman}: Enter emulator name`
         });
-        
-        if(answer['emulator']===''){
+
+        if (answer['emulator'] === '') {
             errorExit(`${henchman}: Emulator name cannot be empty`);
-        }else{
+        } else {
             emulator = answer['emulator'];
         }
     }
@@ -54,7 +54,7 @@ export async function startAndroidSim() {
         `emulator @${emulator}`,
         'Starting Android Simulator'
     );
-    
+
     console.log(byeMessage);
 }
 

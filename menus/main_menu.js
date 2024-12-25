@@ -6,19 +6,19 @@ import {setupMenu} from './setup.js';
 import {startMenu} from './start.js';
 import {getMenu} from "./get.js";
 
-export async function mainMenu(){
+export async function mainMenu() {
     console.log(logo);
     console.log(greetMessage);
-    
+
     const choice = await menu([
         'Create',
         'Cleanup',
         'Get',
         'Setup',
         'Start'
-    ],); 
-    
-    switch(choice){
+    ],);
+
+    switch (choice) {
         case 'Cleanup':
             await cleanupMenu();
             break;

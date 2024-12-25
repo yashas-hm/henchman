@@ -1,5 +1,5 @@
 import path from 'path';
-import {byeMessage, henchman} from '../core/constants.js';
+import {henchman} from '../core/constants.js';
 import ora from 'ora';
 import fs from 'fs/promises';
 import {errorSpinnerExit, execute} from '../core/utils.js';
@@ -21,15 +21,15 @@ export async function cleanPythonProjects(dir) {
                 let virtualEnv = undefined;
                 if (subDir.includes('env')) {
                     virtualEnv = 'env';
-                }else if(subDir.includes('venv')){
+                } else if (subDir.includes('venv')) {
                     virtualEnv = 'venv';
                 }
-                if(virtualEnv!==undefined){
+                if (virtualEnv !== undefined) {
                     console.log(`${henchman}: Cleaning python virtual env in ${chalk.blue(dirPath)}`);
                     await execute(
-                        `cd ${dirPath};`+
-                        `source ${virtualEnv}/bin/activate;`+
-                        'pip freeze > requirements.txt;'+
+                        `cd ${dirPath};` +
+                        `source ${virtualEnv}/bin/activate;` +
+                        'pip freeze > requirements.txt;' +
                         'deactivate',
                         'Saving libraries using pip freeze'
                     );

@@ -25,7 +25,7 @@ export function cleanupCLI() {
         });
 }
 
-export async function cleanupMenu(argument=undefined) {
+export async function cleanupMenu(argument = undefined) {
     console.log(logo);
     console.log(greetMessage);
     argument = await getArgumentByMenu(['flutter', 'node', 'python'], argument, false);

@@ -1,7 +1,7 @@
 name: Feedback
 description: Submit your feedback.
 title: "[Feedback]: "
-labels: ["feedback"]
+labels: [ "feedback" ]
 body:
   - type: markdown
     attributes:

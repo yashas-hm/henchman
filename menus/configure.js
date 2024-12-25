@@ -26,31 +26,31 @@ export async function configure() {
             type: 'input',
             name: 'name',
             message: `${henchman}: Enter your name`,
-            default: oldConfig.node.name,
+            default: oldConfig.node?.name ?? '',
         },
         {
             type: 'input',
             name: 'url',
             message: `${henchman}: Enter your website url`,
-            default: oldConfig.node.url,
+            default: oldConfig.node?.url ?? '',
         },
         {
             type: 'input',
             name: 'license',
             message: `${henchman}: Enter default license`,
-            default: oldConfig.node.license,
+            default: oldConfig.node?.license ?? '',
         },
         {
             type: 'input',
             name: 'emulator',
             message: `${henchman}: Enter default android emulator name ${chalk.yellow('(Run \'emulator -list-avds\' to get list of emulators)')}`,
-            default: oldConfig.sim.emulator,
+            default: oldConfig.sim?.emulator ?? '',
         },
         {
             type: 'input',
             name: 'sha',
             message: `${henchman}: Enter default android debug keystore path`,
-            default: oldConfig.sha.path,
+            default: oldConfig.sha?.path ?? '',
         }
     ]);
     let name = answers['name'];
@@ -63,7 +63,7 @@ export async function configure() {
     if (name !== '') {
         data.push(`name=${name}`);
     } else {
-        name = oldConfig.node.name;
+        name = oldConfig.node?.name;
         if (name !== undefined) {
             data.push(`name=${name}`);
         }
@@ -72,7 +72,7 @@ export async function configure() {
     if (url !== '') {
         data.push(`url=${url}`);
     } else {
-        url = oldConfig.node.url;
+        url = oldConfig.node?.url;
         if (url !== undefined) {
             data.push(`url=${url}`);
         }
@@ -81,7 +81,7 @@ export async function configure() {
     if (license !== '') {
         data.push(`license=${license}`);
     } else {
-        license = oldConfig.node.license;
+        license = oldConfig.node?.license;
         if (license !== undefined) {
             data.push(`license=${license}`);
         } else {
@@ -94,7 +94,7 @@ export async function configure() {
     if (emulator !== '') {
         data.push(`emulator=${emulator}`);
     } else {
-        emulator = oldConfig.sim.emulator;
+        emulator = oldConfig.sim?.emulator;
         if (emulator !== undefined) {
             data.push(`emulator=${emulator}`);
         }
@@ -105,7 +105,7 @@ export async function configure() {
     if (sha !== '') {
         data.push(`path=${sha}`);
     } else {
-        sha = oldConfig.sha.path;
+        sha = oldConfig.sha?.path;
         if (sha !== undefined) {
             data.push(`path=${sha}`);
         }

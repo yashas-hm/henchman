@@ -14,6 +14,16 @@ export async function createNode(dir) {
     const params = [];
     const prompt = [];
     
+    try{
+        await fs.access(path.join(dir));
+    }catch (err){
+        if(err.code==='ENOENT'){
+            await fs.mkdir(path.join(dir));   
+        }else {
+            errorSpinnerExit(undefined, err);
+        }
+    }
+    
     if(name===undefined){
         prompt.push({
             type: 'input',
@@ -59,7 +69,7 @@ export async function createNode(dir) {
     }
 
     if(license!==undefined||name!==''){
-        params.push(`--init-license "${license}`);   
+        params.push(`--init-license "${license}"`);   
     }
 
     await execute(

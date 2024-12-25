@@ -55,6 +55,7 @@ export async function getPath() {
 }
 
 export async function execute(command, message) {
+    console.log(`${command}`);
     const spinner = ora(`${henchman} ${message ?? 'running command ...'}\n`).start();
     const exec = util.promisify(child_process.exec);
     const {stdout} = await exec(command).catch((err)=>errorSpinnerExit(spinner, err));
@@ -108,11 +109,13 @@ export function invalidCommandExit() {
     program.error(byeMessage, {exitCode: 1});
 }
 
-export function errorSpinnerExit(spinner, err) {
+export function errorSpinnerExit(spinner=undefined, err) {
     console.log(errorMessage);
     console.log(err);
     console.log(err.stack);
-    spinner.fail(chalk.red('Error'));
+    if(spinner!==undefined){
+        spinner.fail(chalk.red('Error'));   
+    }
     program.error(byeMessage, {exitCode: 1});
 }
 

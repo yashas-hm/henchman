@@ -25,3 +25,6 @@ node_modules/
 
 # Optional npm cache directory
 .npm
+
+# Config File
+config.ini

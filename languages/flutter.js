@@ -1,5 +1,5 @@
 import {henchman} from '../core/constants.js';
-import {errorSpinnerExit, execute} from '../core/utils.js';
+import {errorSpinnerExit, execute, getFlutterProjectName} from '../core/utils.js';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import fs from 'fs/promises';
@@ -47,6 +47,7 @@ export async function createFlutterPackage(dir) {
 export async function setupFlutterPackageStructure(dir) {
     const spinner = ora(`${henchman}: Initializing setup for Flutter Package`).start();
     try {
+        const projectName = await getFlutterProjectName(dir);
         await fs.mkdir(path.join(dir, 'lib/src'), {recursive: true});
         await fs.writeFile(path.join(dir, `lib/src/${projectName}.dart`), '');
         await fs.appendFile(path.join(dir, '.gitignore'), '\n*ios/\n*android/\n*linux/\n*windows/\n*macos/');

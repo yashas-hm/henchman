@@ -5,9 +5,10 @@ import fs from 'fs/promises';
 import path from 'path';
 import ini from 'ini';
 import {Argument, program} from 'commander';
-import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
 import child_process from 'child_process';
 import util from 'util';
+import yaml from "js-yaml";
+import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
 import {baseDir} from '../henchman.js';
 import {configureCLI} from '../menus/configure.js';
 import {cleanupCLI} from '../menus/cleanup.js';
@@ -158,4 +159,10 @@ export async function getConfig(noError = false) {
             errorSpinnerExit(spinner, err);
         }
     }
+}
+
+export async function getFlutterProjectName(directoryPath) {
+    const pubspecContent = await fs.readFile(path.join(directoryPath, 'pubspec.yaml'), 'utf8');
+    const pubspec = yaml.load(pubspecContent);
+    return pubspec.name;
 }

@@ -7,6 +7,7 @@ import ini from 'ini';
 import {Argument, program} from 'commander';
 import child_process from 'child_process';
 import util from 'util';
+import yaml from 'js-yaml';
 import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
 import {baseDir} from '../henchman.js';
 import {configureCLI} from '../menus/configure.js';
@@ -15,14 +16,16 @@ import {setupCLI} from '../menus/setup.js';
 import {startCLI} from '../menus/start.js';
 import {getCLI} from '../menus/get.js';
 import {createCLI} from '../menus/create.js';
-import packageJson from '../package.json' assert { type: 'json' };
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+const packageJson = require('../package.json');
 
 export async function initCLI() {
-    const json = JSON.parse(packageJson);
     program.name('henchman')
-        .version(json.version)
+        .version(packageJson.version)
         .description(
-            json.description
+            packageJson.description
         )
         .addHelpText('beforeAll', `${logo}\n${greetMessage}`);
     configureCLI();

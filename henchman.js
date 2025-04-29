@@ -8,5 +8,5 @@ export const baseDir = import.meta.dirname;
 if (process.argv.length <= 2) {
     await mainMenu();
 } else {
-    initCLI();
+    await  initCLI();
 }

@@ -17,11 +17,12 @@ import {startCLI} from '../menus/start.js';
 import {getCLI} from '../menus/get.js';
 import {createCLI} from '../menus/create.js';
 
-export function initCLI() {
+export async function initCLI() {
+    const packageJson = await getPackageJson();
     program.name('henchman')
-        .version('v1.0.0')
+        .version(packageJson.version)
         .description(
-            'CLI tool to reduce development time to execute boilerplate tasks and increase productivity.'
+            packageJson.description
         )
         .addHelpText('beforeAll', `${logo}\n${greetMessage}`);
     configureCLI();
@@ -165,4 +166,9 @@ export async function getFlutterProjectName(directoryPath) {
     const pubspecContent = await fs.readFile(path.join(directoryPath, 'pubspec.yaml'), 'utf8');
     const pubspec = yaml.load(pubspecContent);
     return pubspec.name;
+}
+
+export async function getPackageJson() {
+    const packageJsonContent = await fs.readFile(path.join(process.cwd(), 'package.json'), 'utf8');
+    return JSON.parse(packageJsonContent);
 }

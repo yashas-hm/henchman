@@ -7,7 +7,6 @@ import ini from 'ini';
 import {Argument, program} from 'commander';
 import child_process from 'child_process';
 import util from 'util';
-import yaml from "js-yaml";
 import {byeMessage, errorMessage, greetMessage, henchman, logo} from './constants.js';
 import {baseDir} from '../henchman.js';
 import {configureCLI} from '../menus/configure.js';
@@ -16,13 +15,14 @@ import {setupCLI} from '../menus/setup.js';
 import {startCLI} from '../menus/start.js';
 import {getCLI} from '../menus/get.js';
 import {createCLI} from '../menus/create.js';
+import packageJson from '../package.json' assert { type: 'json' };
 
 export async function initCLI() {
-    const packageJson = await getPackageJson();
+    const json = JSON.parse(packageJson);
     program.name('henchman')
-        .version(packageJson.version)
+        .version(json.version)
         .description(
-            packageJson.description
+            json.description
         )
         .addHelpText('beforeAll', `${logo}\n${greetMessage}`);
     configureCLI();
@@ -166,9 +166,4 @@ export async function getFlutterProjectName(directoryPath) {
     const pubspecContent = await fs.readFile(path.join(directoryPath, 'pubspec.yaml'), 'utf8');
     const pubspec = yaml.load(pubspecContent);
     return pubspec.name;
-}
-
-export async function getPackageJson() {
-    const packageJsonContent = await fs.readFile(path.join(process.cwd(), 'package.json'), 'utf8');
-    return JSON.parse(packageJsonContent);
 }
